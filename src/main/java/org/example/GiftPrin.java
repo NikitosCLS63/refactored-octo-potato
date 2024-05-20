@@ -1,7 +1,7 @@
 package org.example;
 
 
-public class GiftPrin {
+public class GiftPrin  {
 
 
     public static String to_bring_gifts(String surname, String gift) {

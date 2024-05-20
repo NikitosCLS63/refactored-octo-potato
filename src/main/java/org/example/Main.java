@@ -1,9 +1,20 @@
 package org.example;
-
-import java.util.Locale;
+import java.io.IOException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.Locale;
 
-abstract public class Main {
+
+ public class Main {
+    static Log mainlog;
+    static {
+        try {
+            mainlog = new Log("logMain.log", Level.ALL);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public static void main(String[] args) {
         Cemetry cemetery = new Cemetry();
@@ -14,6 +25,7 @@ abstract public class Main {
         int choice;
         do {
             System.out.println("Выберите действие:");
+            mainlog.logger.info("Действия меню выбранны");
             System.out.println("1. Показать могилы");
             System.out.println("2. Похоронить обычного человека");
             System.out.println("3. Похоронить крестьянина");
@@ -27,22 +39,44 @@ abstract public class Main {
             System.out.println("11. Принести подарок для короля");
             System.out.println("0. Выход");
 
+
             choice = in.nextInt();
             switch (choice) {
                 case 1: Cemetry.print_grave(); break;
-                case 2: cemetery.bury("Колян", "Коленовский", "22.03.123", "22.03.222"); break;
-                case 3: cemetery.bury_the_peasant("Толян", "Коленовский", "22.03.123", "22.03.222"); break;
-                case 4: cemetery.bury_the_king("Колян", "Королевский", "22.03.123", "22.03.222"); break;
-                case 5: cemetery.update_grave(1, "Васек", "Коленовский", "22.03.123", "22.03.222"); break;
-                case 6: cemetery.del_grave(1); break;
-                case 7: System.out.println(Cemetry.get_grave_location_info("Коленовский", "Новгород", "место 243")); break;
-                case 8: System.out.println(Cemetry.calculate_burial_cost("Стандарт", true, true) + " - цена."); break;
-                case 9: System.out.println(GiftPrin.to_bring_gifts("Коленовский", "арбуз")); break;
-                case 10: System.out.println(GiftPrin.to_bring_gifts_peasant("Коленовский", "дыня")); break;
-                case 11: System.out.println(GiftPrin.to_bring_gifts_king("Коленовский", "картошка")); break;
+                case 2: cemetery.bury("Колян", "Коленовский", "22.03.123", "22.03.222");
+                    mainlog.logger.info("Захаронен обычный житель");
+                break;
+                case 3: cemetery.bury_the_peasant("Толян", "Коленовский", "22.03.123", "22.03.222");
+                    mainlog.logger.info("Захоронен крестьянин");
+                break;
+                case 4: cemetery.bury_the_king("Колян", "Королевский", "22.03.123", "22.03.222");
+                    mainlog.logger.info("Захоронен король");
+                break;
+                case 5: cemetery.update_grave(1, "Васек", "Коленовский", "22.03.123", "22.03.222");
+                    mainlog.logger.info("Информация захроненного усппено обновлена");
+                break;
+                case 6: cemetery.del_grave(1);
+                    mainlog.logger.info("Могила удалена, операция выполнена успешно");
+                break;
+                case 7: System.out.println(Cemetry.get_grave_location_info("Коленовский", "Новгород", "место 243"));
+                    mainlog.logger.info("Вам выдана информация о местоположении могилы");
+                break;
+                case 8: System.out.println(Cemetry.calculate_burial_cost("Стандарт", true, true) + " - цена.");
+                    mainlog.logger.info("Сумма похорон подсчитанна верно");
+                break;
+                case 9: System.out.println(GiftPrin.to_bring_gifts("Коленовский", "арбуз"));
+                    mainlog.logger.info("Подарок обычному жителю принесен");
+                break;
+                case 10: System.out.println(GiftPrin.to_bring_gifts_peasant("Коленовский", "дыня"));
+                    mainlog.logger.info("Подарок крестьянину принесен0");
+                break;
+                case 11: System.out.println(GiftPrin.to_bring_gifts_king("Коленовский", "картошка"));
+                    mainlog.logger.info("Подарок королю принесен");
+                break;
                 default:
                     if (choice != 0) {
                         System.out.println("Неверный выбор, попробуйте снова.");
+                        mainlog.logger.warning("ВЫ НЕ ПРАВИЛЬНЫЙ СДЕЛАЛИ ВЫБОР, СДЕЛАЙТЕ ПРАВИЛЬНЫЙ ВЫБОР");
                     }
                     break;
             }
